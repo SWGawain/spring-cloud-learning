@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+	<bean id="mainService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceUrl" value="${hessian.fpmain.url}/loanService"></property>
+		<property name="serviceInterface"><value>cn.facebank.fpmain.api.manage.service.LoanService</value></property>
+	</bean>
+
+	<bean id="assetService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceUrl" value="${hessian.fpasset.url}/loanService"></property>
+		<property name="serviceInterface"><value>cn.facebank.asset.api.service.LoanService</value></property>
+	</bean>
+
+</beans>
