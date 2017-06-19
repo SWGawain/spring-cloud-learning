@@ -1,5 +1,6 @@
 package org.wjw.redis;
 
+import javafx.scene.shape.VLineTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,17 @@ public class RedisRest {
         Boolean isMember = redisTemplate.opsForSet().isMember(set, key);
 
         return isMember.toString();
+    }
+
+    @RequestMapping("/hash/{map}/set_{key}_{value}")
+    public String setHash(@PathVariable String map,@PathVariable String key,@PathVariable String value){
+        logger.info("redis设置hash，map："+map+"，key："+key+"，value："+value);
+        redisTemplate.opsForHash().put(map,key, value);
+        return "success";
+    }
+
+    @RequestMapping("/hash/{map}/get_{key}")
+    public String getHash(@PathVariable String map,@PathVariable String key){
+        return redisTemplate.opsForHash().get(map,key).toString();
     }
 }

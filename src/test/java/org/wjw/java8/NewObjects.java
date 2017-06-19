@@ -3,10 +3,12 @@ package org.wjw.java8;
 import com.google.common.collect.Maps;
 import org.assertj.core.util.Strings;
 import org.junit.Test;
+import org.springframework.security.access.method.P;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -75,7 +77,18 @@ public class NewObjects {
 
         System.out.println("heihei:"+heihei);
 
+    }
 
+    @Test
+    public void testNewMethod(){
+
+        Object a = null ;
+
+        Object b = "a" ;
+
+        System.out.println(Objects.equals(a,b) );
+
+        Optional aa = Optional.ofNullable(a);
 
     }
 

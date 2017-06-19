@@ -9,6 +9,11 @@
 		<property name="serviceInterface"><value>cn.facebank.fpmain.api.manage.service.LoanService</value></property>
 	</bean>
 
+	<bean id="creditRepaymentService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceUrl" value="${hessian.fpmain.url}/creditRepaymentService"/>
+		<property name="serviceInterface" value="cn.facebank.fpmain.api.manage.service.CreditRepaymentService"/>
+	</bean>
+
 	<bean id="assetService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
 		<property name="serviceUrl" value="${hessian.fpasset.url}/loanService"></property>
 		<property name="serviceInterface"><value>cn.facebank.asset.api.service.LoanService</value></property>
