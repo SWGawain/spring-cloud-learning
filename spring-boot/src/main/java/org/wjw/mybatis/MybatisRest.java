@@ -2,6 +2,7 @@ package org.wjw.mybatis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.wjw.mybatis.entity.FpOrder;
@@ -32,6 +33,11 @@ public class MybatisRest {
     public String get(Long id){
         FpOrder fpOrder = Optional.ofNullable(fpOrderManager.find(id)).orElse(new FpOrder());
         return fpOrder.toString();
+    }
+
+    @RequestMapping("/update/{id}/{modifyTime}")
+    public String update(@PathVariable Long id,@PathVariable Long modifyTime){
+        return fpOrderManager.update(id,modifyTime)+"";
     }
 
 }
