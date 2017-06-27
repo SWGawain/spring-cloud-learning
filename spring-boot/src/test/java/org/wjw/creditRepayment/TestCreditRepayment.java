@@ -22,11 +22,11 @@ public class TestCreditRepayment extends SpringbootDemoApplicationTests {
     public void testHoliday(){
         try {
 
-            LocalDateTime ipTime = LocalDateTime.of(2016, 9, 16, 0, 0);
+            LocalDateTime ipTime = LocalDateTime.of(2016, 6, 27, 0, 0);
             System.out.println(ipTime);
             long miles = ipTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
-            Long holiday = creditRepaymentService.getRepaymentEndDateByChannelHoliday("finlink", "fcp001", miles);
+            Long holiday = creditRepaymentService.getRepaymentEndDateByChannelHoliday("wecashChannel", "WCP001", miles);
 
             LocalDateTime opTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(holiday), ZoneId.systemDefault());
 
