@@ -4,10 +4,13 @@ import javafx.scene.shape.VLineTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Set;
 
 /**
  * Created by SWGawain on 2017/6/7.
@@ -19,12 +22,12 @@ public class RedisRest {
     private static Logger logger = LoggerFactory.getLogger(RedisRest.class);
 
     @Autowired
-    RedisTemplate<String,String> redisTemplate;
+    RedisTemplate<String,Object> redisTemplate;
 
     @RequestMapping("/get")
     public String get(String key){
         logger.info("获取Key："+key);
-        String val = redisTemplate.opsForValue().get(key);
+        String val = redisTemplate.opsForValue().get(key)+"";
         logger.info("value："+val);
         return val;
     }
@@ -49,5 +52,13 @@ public class RedisRest {
     @RequestMapping("/hash/{map}/get_{key}")
     public String getHash(@PathVariable String map,@PathVariable String key){
         return redisTemplate.opsForHash().get(map,key).toString();
+    }
+
+    @RequestMapping("/sysholiday")
+    public String getSysHoliday(){
+        Set fpmain_sysholiday_all = (Set) redisTemplate.opsForValue().get("fpmain_sysholiday_all");
+        StringBuilder builder = new StringBuilder();
+        fpmain_sysholiday_all.stream().forEach((s)->builder.append(s+"<br>"));
+        return builder.toString();
     }
 }
