@@ -2,14 +2,19 @@ package org.wjw.creditRepayment;
 
 import cn.facebank.common.exception.PlateformException;
 import cn.facebank.fpmain.api.manage.service.CreditRepaymentService;
+import cn.facebank.fpmain.api.manage.service.SystemPropService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.wjw.SpringbootDemoApplicationTests;
+import org.wjw.mybatis.mapper.CreditRepaymentMapper;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -19,9 +24,8 @@ public class TestCreditRepayment extends SpringbootDemoApplicationTests {
 
     @Autowired
     CreditRepaymentService creditRepaymentService;
-
     @Autowired
-    RedisTemplate redisTemplate;
+    CreditRepaymentMapper creditRepaymentMapper;
 
     @Test
     public void testHoliday(){
@@ -43,9 +47,10 @@ public class TestCreditRepayment extends SpringbootDemoApplicationTests {
     }
 
     @Test
-    public void testSysHoliday(){
-        Set fpmain_sysholiday_all = (Set) redisTemplate.opsForValue().get("fpmain_sysholiday_all");
-        fpmain_sysholiday_all.stream().forEach(System.out::println);
+    public void testSQl(){
+        List<Map<Long, BigDecimal>> maps = creditRepaymentMapper.sumByChannel();
+        maps.stream().forEach((map)->{
+            System.out.println("日期："+ map.get("plan_date")+"，金额："+map.get("amount"));
+        });
     }
-
 }

@@ -6,10 +6,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -23,6 +26,9 @@ public class RedisRest {
 
     @Autowired
     RedisTemplate<String,Object> redisTemplate;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
     @RequestMapping("/get")
     public String get(String key){
@@ -58,7 +64,11 @@ public class RedisRest {
     public String getSysHoliday(){
         Set fpmain_sysholiday_all = (Set) redisTemplate.opsForValue().get("fpmain_sysholiday_all");
         StringBuilder builder = new StringBuilder();
-        fpmain_sysholiday_all.stream().forEach((s)->builder.append(s+"<br>"));
+        fpmain_sysholiday_all.stream().sorted().forEach((s)->{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(new Date(Long.parseLong(s + "")));
+            builder.append(format+"<br>");
+        });
         return builder.toString();
     }
 }
