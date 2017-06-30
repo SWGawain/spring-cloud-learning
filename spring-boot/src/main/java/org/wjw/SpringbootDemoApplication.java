@@ -1,26 +1,15 @@
 package org.wjw;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.PropertySource;
-import org.wjw.example.Example;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
-@PropertySource("classpath:config.properties")
-@ImportResource("classpath:spring-hessian-remote.xml")
-public class SpringbootDemoApplication extends SpringBootServletInitializer {
+@EnableDiscoveryClient
+public class SpringbootDemoApplication{
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringbootDemoApplication.class, args);
 	}
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(SpringbootDemoApplication.class);
-	}
 }
