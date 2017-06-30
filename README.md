@@ -1,1 +1,1 @@
-spring-cloud-config
+spring-cloud-eureka
