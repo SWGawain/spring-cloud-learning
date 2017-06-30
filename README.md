@@ -54,7 +54,8 @@ Finished :
 
 16.@RunWith(SpringRunner.class)和@SpringBootTest是springboot特殊的junit+spring环境的配置方式
 
-
+17.redis自动配置只能注入一个StringRedisTemplate，如果想用自己定义类型的RedisTemplate，
+需要自己声明，redis数据源可以用配置文件中的
 
    
    
