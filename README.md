@@ -26,7 +26,7 @@ eureka.client.serviceUrl.defaultZone=http://192.168.199.243:8081/eureka/
 @FeignClient("config-service") 指定该接口中的方法指向的服务
 @RequestMapping("/add")指定接口中每个方法通向的http地址
 
-
+10. 讲真，我觉得rest这种方式有点轻，来回转换json并不友好，应该搞搞gRPC
 
 
 
