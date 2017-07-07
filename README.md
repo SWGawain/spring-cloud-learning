@@ -8,7 +8,7 @@ eureka服务中，增加上述配置，避免自己注册自己的情况
 2. @EnableEurekaServer  开启eureka服务器，启动服务发现
  
 3. @EnableEurekaClient 
-eureka.client.serviceUrl.defaultZone=http://192.168.199.243:8081/eureka/
+eureka.client.serviceUrl.defaultZone=http://localhost:8081/eureka/
 开启eureka客户端，向服务端注册自己的服务
 
 4. spring.application.name=config-service 通过这个指定服务的名称
