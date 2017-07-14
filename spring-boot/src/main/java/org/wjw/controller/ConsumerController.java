@@ -1,6 +1,7 @@
 package org.wjw.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,9 @@ public class ConsumerController {
     @Autowired
     ComputeService computeService;
 
+    @Value("${your.name}")
+    String name ;
+
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String add() {
         return restTemplate.getForEntity("http://config-service/add?a=10&b=20", String.class).getBody();
@@ -27,5 +31,10 @@ public class ConsumerController {
     @RequestMapping("/addplus")
     public String addplus(){
         return computeService.add(10,20)+"";
+    }
+
+    @RequestMapping("getName")
+    public String getName(){
+        return name ;
     }
 }
