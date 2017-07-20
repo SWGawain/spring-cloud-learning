@@ -67,6 +67,7 @@
 						<skip>true</skip>
 					</configuration>
 				</plugin>
+
 			</plugins>
 		</pluginManagement>
 	</build>
