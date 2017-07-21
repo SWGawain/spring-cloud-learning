@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 CID=$( docker ps -a  | grep -i "@project_name@" | awk '{print @project_name@}')
 echo $CID
 echo '>>> Stopping old container'
@@ -15,3 +16,7 @@ if [ "$CID" != "" ];then
 echo '>>> delete old images'
 docker rmi $CID
 fi
+
+cp ../../*.jar app.jar
+
+docker build -t @project_name@:1 .

@@ -18,6 +18,8 @@
 
     <properties>
         <project_name>eureka</project_name>
+        <port_1>10000</port_1>
+        <port_2>10001</port_2>
     </properties>
 
 
