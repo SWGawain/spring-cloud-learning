@@ -25,6 +25,9 @@
 		<springboot.version>0.0.1-SNAPSHOT</springboot.version>
 		<spring.cloud.config.version>0.0.1-SNAPSHOT</spring.cloud.config.version>
 		<spring.cloud.eureka.version>0.0.1-SNAPSHOT</spring.cloud.eureka.version>
+		<host_ip>192.168.199.243</host_ip>
+		<eureka_1_port>10000</eureka_1_port>
+		<eureka_2_port>10001</eureka_2_port>
 	</properties>
 
 	<modules>

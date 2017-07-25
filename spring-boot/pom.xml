@@ -17,6 +17,12 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
+	<properties>
+		<project_name>springboot</project_name>
+		<port_1>8100</port_1>
+		<port_2>8101</port_2>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -44,5 +50,24 @@
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-feign</artifactId>
+		</dependency>
+
 	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
 </project>

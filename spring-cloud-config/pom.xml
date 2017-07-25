@@ -17,6 +17,11 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
+    <properties>
+        <project_name>config</project_name>
+        <port_1>11000</port_1>
+        <port_2>11001</port_2>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -54,6 +59,12 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
 </project>
