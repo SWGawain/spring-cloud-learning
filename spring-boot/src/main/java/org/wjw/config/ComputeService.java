@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * Created by SWGawain on 2017/7/7.
  */
-@FeignClient("config-service")
+@FeignClient(value = "config",fallback = ComputeServiceImpl.class)
 public interface ComputeService {
 
     @RequestMapping("/add")
