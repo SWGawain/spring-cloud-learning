@@ -1,65 +1,64 @@
-spring-cloud-eureka
+spring-cloud-zuul
 
-1. eureka.client.register-with-eureka=false
-eureka.client.fetch-registry=false
-eureka.client.serviceUrl.defaultZone=http://localhost:${server.port}/eureka/
-eureka服务中，增加上述配置，避免自己注册自己的情况
+1. 不仅仅实现了路由功能来屏蔽诸多服务细节，更实现了服务级别、均衡负载的路由。
 
-2. @EnableEurekaServer  开启eureka服务器，启动服务发现
- 
-3. @EnableEurekaClient 
-eureka.client.serviceUrl.defaultZone=http://localhost:8081/eureka/
-开启eureka客户端，向服务端注册自己的服务
+2. 实现了接口权限校验与微服务业务逻辑的解耦。通过服务网关中的过滤器，在各生命周期中去校验请求的内容，
+将原本在对外服务层做的校验前移，保证了微服务的无状态性，同时降低了微服务的测试难度，
+让服务本身更集中关注业务逻辑的处理。
 
-4. spring.application.name=config-service 通过这个指定服务的名称
+3. 实现了断路器，不会因为具体微服务的故障而导致服务网关的阻塞，依然可以对外服务。
 
-5. eureka服务器自带展示页面，直接访问localhost:8080就可以看到
+spring-cloud-eureka补充
 
-6. @EnableDiscoveryClient 调用方允许使用服务自动发现来调用接口
+eureka分支中对高可用部分，有几个坑在这里填一下
+1. 如果我理解没错的话，eureka之间通过host来判断是不是同一个机器上的服务，如果启动的几个服务都是localhost
+那eureka不会认为这个是可用的"其他"节点，就不会显示在`DS Replicas`里，也不会在`registered-replicas`里显示
+所以，要指定eureka.instance.hostname，来区分是不同的主机节点
 
-7. DiscoveryClient属于eureka包中的类，这个包里应该有对服务发现的各种支持
+2. 指定了host之后，eureka之间会用host来访问，这就带来了一个问题，如果只是本机启动学习测试用，就得去改hosts文件，
+怎么改就不多说了，把你定的host都指向127.0.0.1，这样eureka之间就会去本机找其他节点，
+也就是说，用假的hostname去欺骗eureka，以模拟多机环境
 
-8. 调用方可以请求eureka之后，用ribbon来做客户端负载均衡，在RestTemplate上声明@LoadBalanced
+3. 接下来就是最关键的docker问题了，docker容器启动后，和宿主机的网络结构问题，会影响到eureka节点间的互访
+但是基本思路不变，还是要设置host，但这时宿主机，也就是你自己的机器上的host不能再设置为127.0.0.1了
+而应该是你本机连wifi后分配的内网地址。讲一个流程解释一下，我们假设宿主机hosts配置为 
+`127.0.0.1 eureka1`
+那么docker容器启动后会继承这个配置，也就是说，解析eureka1这个host会得到 127.0.0.1，
+那么这个容器就会去找他自己，而不是去找宿主机，因为他自己本身也有127.0.0.1，那么很显然
+其他节点开放的端口，并不在这个容器里，所以必然是连不上的
 
-9. 调用方可以用Feign来做api化的RPC调用，集成了ribbon功能
-@EnableFeignClients 开启feign功能
-@FeignClient("config-service") 指定该接口中的方法指向的服务
-@RequestMapping("/add")指定接口中每个方法通向的http地址
+4. docker问题二，容器启动后，eureka会从应用找本机ip地址，这时，容器被分配的地址，应该是172段的
+那么用ip去与其他节点通信的时候，就废了，所以这里指定下`eureka.instance.ip-address`
+为本机的内网ip，一切OK
 
-10. 
-```
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-dependencies</artifactId>
-    <version>Dalston.SR1</version>
-    <type>pom</type>
-    <scope>import</scope>
-</dependency>
+5. 最后补充下eureka节点之间如何做的高可用，简单点说，三个eureka1,eureka2,eureka3节点之间，
+相互注册，eureka1节点注册到eureka2和eureka3上，同理另外两个，然后host区分开，那么对eureka1来说
+eureka2和eureka3都有注册，会被认为是可用备份，会显示在`DS Replicas`和`registered-replicas`里，
+之后eureka1会对另外两个节点同步注册信息，此时如果对方节点响应成功了，会被更新到`available-replicas`
+里，如果响应不成功，连不通的话，就会被更新到`unavailable-replicas`里。
+成功后，eureka2和eureka3成为eureka1的备份节点，同理另外两个，那么eureka1上的注册信息就会同步到另外两个节点上，
+那么此时，eureka2和eureka3上注册的eureka1节点本身，也会被同步回来，
+也就是说，`Instances currently registered with Eureka`这一栏里，同时会有这三个节点，
+这也就是为什么eureka1并没有注册到自己，但是依然会有注册信息的原因。
+三个都启动成功之后，每30s会发心跳信息，90s内一直ping不通的，会被认为注册信息过时，自动清理掉。
+这也就是为啥有时候感觉自己的服务动不动的被eureka自己踢掉了，原因很简单，人家联系不上你，时间长了自然就不要你了呗。
+启动后建议观察下日志，不再报链接错误，就是节点都正常了，但凡还报链接有问题的，一定是真的有问题。
 
-```
-这个包整合了cloud大部分需要的功能，starter包中的内容相对较少，新的spring-cloud发版不再以数字为版本号
-改为人名，从A到Z
+6. 服务启动的时候，会有各种报错信息，原因很简单，eureka1要注册到另外两个，但是另外俩都没启动起来呢
+所以肯定连不通报错，不用在乎，所谓服务发现嘛，等服务真的启动成功了，自然会发现
 
-11. 讲真，我觉得rest这种方式有点轻，来回转换json并不友好，应该搞搞gRPC
+7. eureka有自我保护机制，什么意思呢，你注册了10个节点，突然可能因为网络波动，有8 9个连不到了
+此时eureka不会直接把这个节点注销掉，因为你的服务本身应该还是可用的，所以如果有其他请求过来，eureka依然会把地址返回，
+eureka的宗旨是，优先保护好的服务，坏掉的服务如果真的返回，那会有熔断器帮忙做保护
 
-12. docker是个好东西，往后更多的服务启动，本地一个个的跑jar包或者tomcat，估计都是玩不起的。。
+8. 检查eureka高可用是否搭建成功，把config跑两三个节点，注册到eureka上，如果成功，那么每个eureka节点上都应该有这些config注册信息，
+如果没有或者如果分布不均，那肯定是eureka集群搭建不成功
 
-13. eureka服务高可用，用两个节点互相注册，然后服务方同时注册这两个点
+9. 说实在的，整个springcloud，最为中心的，就在eureka集群，高可用做不好，服务之间互联几乎没法用，加上现在普遍用docker，着实应该好好研究下，
+更别说在docker集群的情况下，Kubernetes的配置方式更需要注意
 
-14. eureka.instance.hostname这个配置在docker启动时务必注意，如果不配置，会获取docker的容器名
-同样的，server.port如果不配置，用默认的8080的话，那么在eureka节点上就会用8080注册，
-这里注意，如果是用docker启动的话，容器间需要额外配置互访端口和vhosts，另外docker集群的话，容器互访的配置难度则会更大，
-所以我觉得还是配好固定的端口和ip比较好，改起来麻烦的话，放在pom里也行
 
-15. config热部署需要@RefreshScope，需要spring-boot-starter-actuator包，需要对security做额外的控制或直接关闭
-/refresh可以让应用刷新配置，但是只刷新RefreshScope标签标记过的，而且只支持POST请求
 
-16. 熔断器这个东西Feign包是集成过的，@FeignClient(value = "config",fallback = ComputeServiceImpl.class)
-接口上的这个声明，会在需要熔断的时候，找ComputeServiceImpl.class这个类里的方法，
-换句话理解，这个接口是要用REST调用的，然而触发熔断的时候，就不再去找RPC了，而是去找接口对应的实现类和实现方法
-说白了，给个默认处理方法
-如果不用Feign包，那就得加上hystrix的包，所谓熔断嘛，就像电闸，功率过大了，就及时断掉，对应到我们的代码
-就是调用时间太长了，那就先别调用了，不要让前面的应用拖死后面的，那么这里有个问题，就是gRPC的情况下，怎么集成这个熔断器
-果然还是应该有抽时间研究下
+
 
 

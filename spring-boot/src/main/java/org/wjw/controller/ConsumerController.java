@@ -26,13 +26,13 @@ public class ConsumerController {
     String name ;
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String add() {
-        return restTemplate.getForEntity("http://config-service/add?a=10&b=20", String.class).getBody();
+    public String add(String a,String b) {
+        return restTemplate.getForEntity("http://config/add?a="+a+"&b="+b, String.class).getBody();
     }
 
     @RequestMapping("/addplus")
-    public String addplus(){
-        return computeService.add(10,20)+"";
+    public String addplus(Integer a,Integer b){
+        return computeService.add(a,b)+"";
     }
 
     @RequestMapping("getName")

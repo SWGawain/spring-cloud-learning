@@ -25,15 +25,18 @@
 		<springboot.version>0.0.1-SNAPSHOT</springboot.version>
 		<spring.cloud.config.version>0.0.1-SNAPSHOT</spring.cloud.config.version>
 		<spring.cloud.eureka.version>0.0.1-SNAPSHOT</spring.cloud.eureka.version>
+		<spring.cloud.zuul.version>0.0.1-SNAPSHOT</spring.cloud.zuul.version>
 		<host_ip>192.168.199.243</host_ip>
 		<eureka_1_port>10000</eureka_1_port>
 		<eureka_2_port>10001</eureka_2_port>
+		<eureka_3_port>10002</eureka_3_port>
 	</properties>
 
 	<modules>
 		<module>spring-boot</module>
 		<module>spring-cloud-config</module>
         <module>spring-cloud-eureka</module>
+        <module>spring-cloud-zuul</module>
     </modules>
 
 	<dependencyManagement>
