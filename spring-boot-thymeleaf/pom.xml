@@ -2,21 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>org.wjw</groupId>
-    <artifactId>spring-cloud-config</artifactId>
-    <version>${spring.cloud.config.version}</version>
-
-    <name>spring-cloud-config</name>
-    <description>My project for Spring Cloud Config</description>
-
     <parent>
-        <groupId>org.wjw</groupId>
         <artifactId>spring-cloud</artifactId>
+        <groupId>org.wjw</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
+    <artifactId>spring-boot-thymeleaf</artifactId>
+    <groupId>org.wjw</groupId>
+    <version>${spring.boot.thymeleaf.version}</version>
 
     <dependencies>
         <dependency>
@@ -36,10 +31,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-config-server</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-
     </dependencies>
 
 
