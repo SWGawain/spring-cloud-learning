@@ -13,6 +13,7 @@ import org.wjw.config.ComputeService;
  * Created by SWGawain on 2017/6/30.
  */
 @RestController
+@RequestMapping("/consume")
 @RefreshScope
 public class ConsumerController {
 
@@ -35,7 +36,7 @@ public class ConsumerController {
         return computeService.add(a,b)+"";
     }
 
-    @RequestMapping("getName")
+    @RequestMapping("/getName")
     public String getName(){
         return name ;
     }
