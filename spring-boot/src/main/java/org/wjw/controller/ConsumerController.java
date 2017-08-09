@@ -1,5 +1,6 @@
 package org.wjw.controller;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -27,8 +28,13 @@ public class ConsumerController {
     String name ;
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
+    @HystrixCommand(fallbackMethod = "addFail")
     public String add(String a,String b) {
         return restTemplate.getForEntity("http://config/add?a="+a+"&b="+b, String.class).getBody();
+    }
+
+    public String addFail(String a,String b){
+        return "-999";
     }
 
     @RequestMapping("/addplus")
