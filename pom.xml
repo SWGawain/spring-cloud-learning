@@ -35,8 +35,8 @@
 	<modules>
 		<module>spring-boot</module>
 		<module>spring-cloud-config</module>
-        <module>spring-cloud-eureka</module>
         <module>spring-cloud-zuul</module>
+        <module>spring-cloud-dashboard</module>
         <module>spring-cloud-turbine</module>
     </modules>
 

@@ -2,27 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <groupId>org.wjw</groupId>
-    <artifactId>spring-cloud-eureka</artifactId>
-    <version>${spring.cloud.eureka.version}</version>
-    <modelVersion>4.0.0</modelVersion>
-
-    <name>spring-cloud-eureka</name>
-    <description>My project for Spring Clound Erueka</description>
-
     <parent>
-        <groupId>org.wjw</groupId>
         <artifactId>spring-cloud</artifactId>
+        <groupId>org.wjw</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>spring-cloud-dashboard</artifactId>
 
     <properties>
-        <project_name>eureka</project_name>
-        <port_1>10000</port_1>
-        <port_2>10001</port_2>
-        <port_3>10002</port_3>
+        <project_name>dashboard</project_name>
+        <port>13000</port>
     </properties>
-
 
     <dependencies>
         <dependency>
@@ -43,21 +35,18 @@
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka-server</artifactId>
+            <artifactId>spring-cloud-starter-hystrix</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
     </dependencies>
-
 
     <build>
         <plugins>

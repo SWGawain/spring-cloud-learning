@@ -17,8 +17,8 @@
 
     <properties>
         <project_name>zuul</project_name>
-        <port_1>12000</port_1>
-        <port_2>12001</port_2>
+        <port_1>8080</port_1>
+        <port_2>8081</port_2>
     </properties>
 
     <dependencies>
@@ -45,7 +45,7 @@
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
+            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
         </dependency>
 
     </dependencies>
