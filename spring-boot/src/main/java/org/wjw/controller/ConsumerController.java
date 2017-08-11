@@ -26,6 +26,12 @@ public class ConsumerController {
 
     @Value("${your.name}")
     String name ;
+    @Value("${aaa:defaultaaa}")
+    String aaa ;
+    @Value("${global.name:defaultName}")
+    String globalName ;
+    @Value("${demo.global.name:defaultDemoName}")
+    String demoGlobalName;
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     @HystrixCommand(fallbackMethod = "addFail")
@@ -45,5 +51,10 @@ public class ConsumerController {
     @RequestMapping("/getName")
     public String getName(){
         return name ;
+    }
+
+    @RequestMapping("/getglobal")
+    public String getglobal(){
+        return aaa +" " +globalName+" "+demoGlobalName;
     }
 }
